@@ -30,7 +30,7 @@ nome = str(input("Nome do jogador: "))
 gols = (input("Número de gols: "))
 print (gols.isnumeric())
 while gols.isnumeric() ==  False:
-    gols = (input("Númeo inválido, digite novamente o número de gols: "))
+    gols = (input("Número inválido, digite novamente o número de gols: "))
 
 jogador = Jogador(nome, gols)
 
