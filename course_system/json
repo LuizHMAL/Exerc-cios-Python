@@ -1,0 +1,52 @@
+{
+  "courses": [
+    {
+      "id": "math101",
+      "name": "Matemática",
+      "hours": 60,
+      "min_score": 7.0,
+      "students": [
+        {
+          "id": "s1",
+          "name": "João",
+          "scores": {
+            "math101": 8.5
+          }
+        }
+      ]
+    },
+    {
+      "id": "hist201",
+      "name": "História",
+      "hours": 40,
+      "min_score": 6.0,
+      "students": []
+    }
+  ],
+  "students": [
+    {
+      "id": "s1",
+      "name": "João",
+      "scores": {
+        "math101": 8.5
+      }
+    },
+    {
+      "id": "s2",
+      "name": "Maria",
+      "scores": {}
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t1",
+      "name": "Prof. Carlos",
+      "teaching_hours": 30
+    },
+    {
+      "id": "t2",
+      "name": "Profª Ana",
+      "teaching_hours": 40
+    }
+  ]
+}

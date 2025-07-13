@@ -1,0 +1,20 @@
+{
+  "courses": [
+    {
+      "id": "1234",
+      "name": "Engenharia de produção",
+      "hours": 2000,
+      "min_score": 65.0,
+      "students": []
+    },
+    {
+      "id": "123",
+      "name": "Enhenharia de Conmputação",
+      "hours": 2000,
+      "min_score": 65.0,
+      "students": []
+    }
+  ],
+  "students": [],
+  "teachers": []
+}

@@ -1,0 +1,36 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "perfume",
+            "price": 120.0,
+            "stock": 30
+        },
+        {
+            "id": 2,
+            "name": "tinta",
+            "price": 20.0,
+            "stock": 20
+        }
+    ],
+    "customers": [
+        {
+            "id": 1,
+            "name": "Luiz",
+            "email": "luiz.email.com"
+        },
+        {
+            "id": 2,
+            "name": "Joao",
+            "email": "joao.email.com"
+        }
+    ],
+    "orders": [
+        {
+            "id": 1,
+            "customer_id": 1,
+            "product_id": 1,
+            "quantity": 1
+        }
+    ]
+}
