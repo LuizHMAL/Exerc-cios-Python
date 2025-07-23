@@ -32,6 +32,11 @@ class Interaction:
         print("4. Delete Product")
         print("5. Back to Main Menu")
         choice = input("Please select an option: ")
+
+        # match choice:
+        #     case '1':
+        #         self.view_products()
+        #     ...
         if choice == '1':
             self.view_products()
         elif choice == '2':
@@ -47,6 +52,7 @@ class Interaction:
 
     def view_products(self):
         print("Product List:")
+        
         for product in self.products:
             print(f"ID: {product.id}, Name: {product.name}, Price: {product.price}, Stock: {product.stock}")
 
