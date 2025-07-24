@@ -1,0 +1,23 @@
+{
+    "products": [
+        {
+            "id": 131126900826000,
+            "name": "jogo",
+            "price": 300.0,
+            "stock": 20
+        }
+    ],
+    "customers": [
+        {
+            "id": 131126900833872,
+            "name": "luiz@gmail.com",
+            "email": "1234"
+        },
+        {
+            "id": 131126899464272,
+            "name": "luiz",
+            "email": "luiz"
+        }
+    ],
+    "orders": []
+}

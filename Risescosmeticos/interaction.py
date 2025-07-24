@@ -1,16 +1,13 @@
-from product_model import Product
-from customer_model import Customer     
-from orders_model import Orders
-from data import load_data, save_data
+from data_manager import DataManager
 
 class Interaction:
     def __init__(self):
-        self.products, self.customers, self.orders = load_data()
+        self.manager = DataManager()
 
     def start(self):
         print("Welcome to the Product Management System!")
         while True:
-            print("1. View Manager")
+            print("\n1. View Manager")
             print("2. View Customer")
             print("3. Exit")
             choice = input("Please select an option: ")
@@ -25,74 +22,46 @@ class Interaction:
                 print("Invalid choice. Please try again.")
 
     def view_manager(self):
-        print("Manager View")
-        print("1. View Products")
-        print("2. Add Product")
-        print("3. Update Product")
-        print("4. Delete Product")
-        print("5. Back to Main Menu")
-        choice = input("Please select an option: ")
+        while True:
+            print("\nManager View")
+            print("1. View Products")
+            print("2. Add Product")
+            print("3. Update Product")
+            print("4. Delete Product")
+            print("5. Back to Main Menu")
+            choice = input("Select an option: ")
 
-        # match choice:
-        #     case '1':
-        #         self.view_products()
-        #     ...
-        if choice == '1':
-            self.view_products()
-        elif choice == '2':
-            self.add_product()
-        elif choice == '3':
-            self.update_product()
-        elif choice == '4':
-            self.delete_product()
-        elif choice == '5':
-            return
-        else:
-            print("Invalid choice. Please try again.")
-
-    def view_products(self):
-        print("Product List:")
-        
-        for product in self.products:
-            print(f"ID: {product.id}, Name: {product.name}, Price: {product.price}, Stock: {product.stock}")
-
-    def add_product(self):
-        product_id = int(input("Enter product ID: "))
-        if any(p.id == product_id for p in self.products):
-            print("Product ID already exists.")
-            return
-        name = input("Enter product name: ")
-        price = float(input("Enter product price: "))
-        stock = int(input("Enter product stock: "))
-        new_product = Product(product_id, name, price, stock)
-        self.products.append(new_product)
-        save_data(self.products, self.customers, self.orders)
-        print("Product added successfully.")
-
-    def update_product(self):
-        product_id = int(input("Enter product ID to update: "))
-        for product in self.products:
-            if product.id == product_id:
-                product.name = input("Enter new product name: ")
-                product.price = float(input("Enter new product price: "))
-                product.stock = int(input("Enter new product stock: "))
-                save_data(self.products, self.customers, self.orders)
-                print("Product updated successfully.")
-                return
-        print("Product not found.")
-
-    def delete_product(self):
-        product_id = int(input("Enter product ID to delete: "))
-        for product in self.products:
-            if product.id == product_id:
-                self.products.remove(product)
-                save_data(self.products, self.customers, self.orders)
-                print("Product deleted successfully.")
-                return
-        print("Product not found.")
+            if choice == '1':
+                for p in self.manager.get_all_products():
+                    print(f"ID: {p.id}, Name: {p.name}, Price: {p.price}, Stock: {p.stock}")
+            elif choice == '2':
+                name = input("Enter name: ")
+                price = float(input("Enter price: "))
+                stock = int(input("Enter stock: "))
+                self.manager.add_product(name, price, stock)
+                print("Product added.")
+            elif choice == '3':
+                id = int(input("Enter product ID: "))
+                name = input("Enter new name: ")
+                price = float(input("Enter new price: "))
+                stock = int(input("Enter new stock: "))
+                if self.manager.update_product(id, name, price, stock):
+                    print("Product updated.")
+                else:
+                    print("Product not found.")
+            elif choice == '4':
+                id = int(input("Enter product ID to delete: "))
+                if self.manager.delete_product(id):
+                    print("Deleted.")
+                else:
+                    print("Product not found.")
+            elif choice == '5':
+                break
+            else:
+                print("Invalid option.")
 
     def view_customer(self):
-        print("Customer View")
+        print("\nCustomer View")
         print("1. Log in")
         print("2. Sign up")
         choice = input("Please select an option: ")
@@ -100,75 +69,55 @@ class Interaction:
             self.login_customer()
         elif choice == '2':
             self.signup_customer()
-        else:
-            print("Invalid choice. Please try again.")
 
     def login_customer(self):
         email = input("Enter your email: ")
-        for customer in self.customers:
-            if customer.email == email:
-                print(f"Welcome back, {customer.name}!")
-                self.customer_menu(customer)
-                return
-        print("Customer not found. Please sign up.")
+        customer = self.manager.get_customer_by_email(email)
+        if customer:
+            print(f"Welcome back, {customer.name}!")
+            self.customer_menu(customer)
+        else:
+            print("Customer not found.")
 
     def signup_customer(self):
         name = input("Enter your name: ")
         email = input("Enter your email: ")
-        if any(c.email == email for c in self.customers):
+        customer = self.manager.add_customer(name, email)
+        if customer:
+            print("Signup successful. You can now log in.")
+        else:
             print("Email already registered.")
-            return
-        customer_id = max([c.id for c in self.customers], default=0) + 1
-        new_customer = Customer(customer_id, name, email)
-        self.customers.append(new_customer)
-        save_data(self.products, self.customers, self.orders)
-        print("Customer signed up successfully. You can now log in.")
 
     def customer_menu(self, customer):
-        print(f"Welcome, {customer.name}!")
         while True:
+            print("\nCustomer Menu")
             print("1. View Products")
             print("2. Place Order")
-            print("3. View Orders")
+            print("3. View My Orders")
             print("4. Back to Main Menu")
-            choice = input("Please select an option: ")
+            choice = input("Choose: ")
+
             if choice == '1':
-                self.view_products()
+                for p in self.manager.get_all_products():
+                    print(f"ID: {p.id}, Name: {p.name}, Price: {p.price}, Stock: {p.stock}")
             elif choice == '2':
-                self.place_order(customer)
-            elif choice == '3':
-                self.view_orders(customer)
-            elif choice == '4':
-                return
-            else:
-                print("Invalid choice. Please try again.")
-
-    def place_order(self, customer):
-        self.view_products()
-        product_id = int(input("Enter product ID to order: "))
-        for product in self.products:
-            if product.id == product_id:
+                product_id = int(input("Enter product ID: "))
                 quantity = int(input("Enter quantity: "))
-                if quantity <= product.stock:
-                    order_id = max([o.id for o in self.orders], default=0) + 1
-                    order = Orders(order_id, customer.id, product.id, quantity)
-                    self.orders.append(order)
-                    product.stock -= quantity
-                    save_data(self.products, self.customers, self.orders)
-                    print("Order placed successfully.")
+                order = self.manager.place_order(customer.id, product_id, quantity)
+                if order:
+                    print("Order placed.")
                 else:
-                    print("Insufficient stock.")
-                return
-        print("Product not found.")
-
-    def view_orders(self, customer):
-        print(f"Orders for {customer.name}:")
-        customer_orders = [order for order in self.orders if order.customer_id == customer.id]
-        if not customer_orders:
-            print("No orders found.")
-        else:
-            for order in customer_orders:
-                product = next((p for p in self.products if p.id == order.product_id), None)
-                product_name = product.name if product else "Unknown Product"
-                print(f"Order ID: {order.id}, Product: {product_name}, Quantity: {order.quantity}")
-
+                    print("Order failed. Insufficient stock or product not found.")
+            elif choice == '3':
+                orders = self.manager.get_orders_by_customer(customer.id)
+                if not orders:
+                    print("No orders found.")
+                else:
+                    for o in orders:
+                        product = next((p for p in self.manager.get_all_products() if p.id == o.product_id), None)
+                        pname = product.name if product else "Unknown"
+                        print(f"Order ID: {o.id}, Product: {pname}, Qty: {o.quantity}")
+            elif choice == '4':
+                break
+            else:
+                print("Invalid option.")
